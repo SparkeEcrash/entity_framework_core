@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using WizLib_DataAccess.FluentConfig;
 using WizLib_Model.Models;
+using WizLib_Model.Models.ViewModels;
 
 namespace WizLib_DataAccess
 {
@@ -12,7 +13,7 @@ namespace WizLib_DataAccess
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
         }
-
+        public DbSet<BookDetailsFromView> BookDetailsFromViews { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Genre> Genres { get; set; }
         public DbSet<Book> Books { get; set; }
@@ -38,6 +39,9 @@ namespace WizLib_DataAccess
             modelBuilder.ApplyConfiguration(new FluentBookAuthorConfig());
             modelBuilder.ApplyConfiguration(new FluentPublisherConfig());
             modelBuilder.ApplyConfiguration(new FluentAuthorConfig());
+
+            modelBuilder.Entity<BookDetailsFromView>().HasNoKey().ToView("GetOnlyBookDetails");
+            //.ToView() prevents EntityCore from creating a new mysql table
             
             /* The codes below have been replaced by lines 36-40
             //BookDetails
